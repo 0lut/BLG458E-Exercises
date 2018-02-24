@@ -24,3 +24,15 @@ sundays1 start end = sundays' start 1
                     
                     
      
+leap :: Integer -> Bool
+leap y = (mod y 4) == 0 && (mod y 100) /= 0 || (mod y 400) == 0
+
+isIn :: Ord (a) => a -> [a] -> Bool
+isIn _ [] = False
+isIn x xs = head xs == x || isIn x (tail xs)
+
+daysInMonth :: Integer -> Integer -> Integer
+daysInMonth 2 y = if leap y then 29 else 28
+daysInMonth m _ = if  m `isIn` [4,6,9,11] then 30 else 31
+
+
