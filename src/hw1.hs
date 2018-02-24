@@ -9,7 +9,18 @@ dayOfWeek y m d = z
                     j = div y 100
                     k = mod y 100
                     m' =  if m<=2 then m +12 else m 
-                 
+
+sundays1 :: Integer -> Integer -> Integer
+sundays1 start end = sundays' start 1
+                where
+                    sundays' :: Integer -> Integer -> Integer
+                    sundays' y m
+                        | y > end = 0
+                        | otherwise = if dayOfWeek y m 1 == 1 then rest + 1 else rest
+                        where
+                            nextY = if m == 12 then y+1 else y
+                            nextM = if m == 12 then 1 else m+1
+                            rest = sundays' nextY nextM
+                    
+                    
      
-leap :: Integer -> Bool
-leap y = (mod y 4) == 0 && (mod y 100) /= 0 || (mod y 400) == 0
