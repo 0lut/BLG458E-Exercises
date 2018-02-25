@@ -1,5 +1,5 @@
 module Hw1
-    (dayOfWeek, sundays1, leap, isIn, daysInMonth)
+    (dayOfWeek, sundays1, sundays2, leap, isIn, daysInMonth)
     where
 
 dayOfWeek :: (Integral a) => a -> a -> a -> a
@@ -36,6 +36,19 @@ isIn x xs = head xs == x || isIn x (tail xs)
 
 daysInMonth :: Integer -> Integer -> Integer
 daysInMonth 2 y = if leap y then 29 else 28
-daysInMonth m _ = if  m `isIn` [4,6,9,11] then 30 else 31
+daysInMonth m _ = if  isIn m [4,6,9,11] then 30 else 31
 
 
+sundays2 :: Integer -> Integer -> Integer 
+sundays2 start end  = sundays' start 1 2
+                where 
+                    sundays' :: Integer -> Integer -> Integer -> Integer
+                    sundays' y m weekday
+                        | y > end = 0
+                        | otherwise = if mod (mod (daysInMonth m y) 7 + weekday) 7 == 0 then rest + 1 else rest
+                        where
+                            nextY = if m == 12 then y+1 else y
+                            nextM = if m == 12 then 1 else m+1
+                            nextW = mod (mod (daysInMonth m y) 7 + weekday) 7
+                            rest = sundays' nextY nextM nextW
+                            
