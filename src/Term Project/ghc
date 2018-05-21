@@ -1,0 +1,1 @@
+ghc --make $1 -i -ilib -dynamic -fforce-recomp -main-is main -v0 
