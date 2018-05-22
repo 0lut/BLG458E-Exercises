@@ -10,8 +10,8 @@ add :: Trie -> IO Trie
 add tr = do
             putStrLn "Write a word"
             xs <- getLine
-            let x = insert' xs tr 
-            return x
+            let newtr = insert' xs tr 
+            return newtr
 
 searchWord :: Trie -> IO Trie
 searchWord tr = do
@@ -35,6 +35,15 @@ findPrefix tr = do
             return tr 
 
 
+
+printTrie :: Trie -> IO Trie            
+printTrie tr = do 
+                putStrLn "List of words in dictionary" >>  (putStrLn $ unlines $ getWords tr) 
+                return tr
+
+
+
+empty' :: Trie
 empty' = Trie False Map.empty
 
 
@@ -87,9 +96,9 @@ printMenu tr = do
                     'a' ->  add tr >>= printMenu 
                     's' -> searchWord tr >>= printMenu
                     'f' -> findPrefix tr >>= printMenu
-                    'p' ->  putStrLn "List of words in dictionary" >>  (putStrLn $ unlines $ getWords tr) >> printMenu tr
+                    'p' -> printTrie tr >>= printMenu
                     'e' -> return ()
-                    _ -> putStrLn "Invalid command!">> printMenu tr
+                    _ -> putStrLn "Invalid command!" >> printMenu tr
 
 main = do
         args <- getArgs
