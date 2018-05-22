@@ -20,8 +20,20 @@ insert' (x:xs) (Trie e c) = case Map.lookup x c of
 insertList :: [Word] -> Trie -> Trie
 insertList xs tr = Prelude.foldr (\x y-> insert' x y) tr xs
 
-
+search :: String -> Trie -> Bool
 search [] tr = end tr
 search (x:xs) tr = case Map.lookup x (children tr) of 
                 Nothing -> False 
                 Just a -> search xs a 
+
+foldrWithKey' f acc mp = foldr (uncurry f) acc (Map.toList mp) 
+
+getWords :: Trie -> [Word]
+getWords tr = getWords' [] [] tr
+            where 
+                getWords' acc1 acc2 (Trie e c) = case e of 
+                        True -> acc1:rest
+                        False -> rest
+                        where 
+                            rest = foldrWithKey' (\k a y -> getWords' (acc1++[k]) y a) acc2 c
+                
