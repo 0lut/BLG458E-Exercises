@@ -36,4 +36,19 @@ getWords tr = getWords' [] [] tr
                         False -> rest
                         where 
                             rest = foldrWithKey' (\k a y -> getWords' (acc1++[k]) y a) acc2 c
-                
+
+takepr pr = take (length pr)  
+prefix :: String -> Trie -> Maybe [Word]
+prefix pr tr = case foldr (\x y -> if (takepr pr x) == pr then x:y else y) [] (getWords tr) of
+                [] -> Nothing
+                a -> Just a
+
+prefix2 :: String -> Trie -> Maybe [Word]
+prefix2 xs tr = case prefix2' xs tr of
+                [] -> Nothing
+                a -> Just (map (xs++) a)
+                where
+                    prefix2' [] tr = getWords tr                
+                    prefix2' (x:xs) tr = case Map.lookup x (children tr)  of
+                                        Just a -> prefix2' xs a
+                                        Nothing ->  []
