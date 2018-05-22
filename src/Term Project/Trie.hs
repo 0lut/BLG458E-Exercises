@@ -15,3 +15,7 @@ insert' [] (Trie e c) = (Trie True c)
 insert' (x:xs) (Trie e c) = case Map.lookup x c of  
     Nothing -> (Trie (e) (Map.insert x (insert' xs empty') c))
     Just a ->  (Trie (e) (Map.insert x (insert' xs a) c))
+
+        
+insertList :: [Word] -> Trie -> Trie
+insertList xs tr = Prelude.foldr (\x y-> insert' x y) tr xs
