@@ -6,6 +6,34 @@ import System.Environment
 data Trie = Trie {end::Bool, children:: Map.Map Char Trie} deriving Show
 type Word = String
 
+add :: Trie -> IO Trie
+add tr = do
+            putStrLn "Write a word"
+            xs <- getLine
+            let x = insert' xs tr 
+            return x
+
+searchWord :: Trie -> IO Trie
+searchWord tr = do
+            putStrLn "Enter word/prefix"
+            pat <- getLine  
+            let res = search pat tr
+            case res of 
+                True -> putStrLn $ unlines [show pat, "exists in dictionary"]
+                False  -> putStrLn "Not exists in dictionary"  
+                
+            return tr
+
+findPrefix :: Trie -> IO Trie
+findPrefix tr = do 
+            putStrLn "Enter word/prefix"
+            pat <- getLine
+            let w = prefix2 pat tr
+            case w of 
+                Just a -> putStrLn "Found words:" >> (putStrLn $ unlines a)
+                Nothing -> putStrLn "No words found with given prefix!"
+            return tr 
+
 
 empty' = Trie False Map.empty
 
@@ -59,9 +87,9 @@ printMenu tr = do
                     'a' ->  add tr >>= printMenu 
                     's' -> searchWord tr >>= printMenu
                     'f' -> findPrefix tr >>= printMenu
-                    'p' ->  putStrLn "List of words in dictionary" >>  (putStrLn $ unlines $ getWords tr) 
-                    _ -> putStrLn "Invalid command!"
-            printMenu tr
+                    'p' ->  putStrLn "List of words in dictionary" >>  (putStrLn $ unlines $ getWords tr) >> printMenu tr
+                    'e' -> return ()
+                    _ -> putStrLn "Invalid command!">> printMenu tr
 
 main = do
         args <- getArgs
