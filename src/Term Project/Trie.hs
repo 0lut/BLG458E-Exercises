@@ -52,3 +52,20 @@ prefix2 xs tr = case prefix2' xs tr of
                     prefix2' (x:xs) tr = case Map.lookup x (children tr)  of
                                         Just a -> prefix2' xs a
                                         Nothing ->  []
+printMenu tr = do 
+            putStrLn "Make a choice"
+            choice <- getLine
+            case head choice of 
+                    'a' ->  add tr >>= printMenu 
+                    's' -> searchWord tr >>= printMenu
+                    'f' -> findPrefix tr >>= printMenu
+                    'p' ->  putStrLn "List of words in dictionary" >>  (putStrLn $ unlines $ getWords tr) 
+                    _ -> putStrLn "Invalid command!"
+            printMenu tr
+
+main = do
+        args <- getArgs
+        contents <- readFile "words.txt"
+        let q = lines contents
+        let tr = insertList q empty' 
+        printMenu tr        
