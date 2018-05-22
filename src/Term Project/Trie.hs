@@ -102,7 +102,7 @@ printMenu tr = do
 
 main = do
         args <- getArgs
-        contents <- readFile "words.txt"
+        contents <- readFile $ head args
         let q = lines contents
         let tr = insertList q empty' 
         printMenu tr        
